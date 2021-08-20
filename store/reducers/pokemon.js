@@ -1,7 +1,7 @@
 import { SET_POKEMONS } from "../actions/pokemon";
 
 const initalState = {
-  pokemon: ["helloWorld"],
+  pokemon: [],
 };
 
 export default (state = initalState, action) => {

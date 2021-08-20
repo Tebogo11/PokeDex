@@ -21,11 +21,11 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <View>
+      <View style={{ flex: 1 }}>
         <View style={styles.StatusBar}>
           <StatusBar translucent barStyle="light-content" />
         </View>
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
           <Header />
           <SearchResult />
           {/* <SearchPage /> */}
