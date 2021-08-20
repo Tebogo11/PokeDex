@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { Button } from "react-native-elements";
+
+import { Link, NativeRouter, useHistory } from "react-router-native";
 //This is the first screen shown to the user
 //This is primarly meant for the user to type in the
 //details that my  result in finding their Pokemon
-const SearchPage = () => {
+const SearchPage = ({ searching, setScreen }) => {
   const [searchValue, setSearchValue] = useState("");
+
+  const history = useHistory();
+
+  /**
+   * This changes the current screen of the page
+   * @param {string} path the screen the user is trying to reach
+   * @return {void}
+   */
+  const routeChange = () => {
+    let path = `/result`;
+    history.push(path);
+    searching(searchValue);
+    setScreen("result");
+  };
   return (
     <View style={{ color: "red" }}>
       <Text style={styles.heading}>Find Your Pokémon</Text>
@@ -18,14 +34,13 @@ const SearchPage = () => {
         Search the Pokédex for your favorite Pokémon/s by name, types, and
         habitats.
       </Text>
+
       <Button
         containerStyle={styles.button}
         title="Search"
         type="solid"
         buttonStyle={styles.buttonColor}
-        onPress={() => {
-          console.log(searchValue);
-        }}
+        onPress={routeChange}
       />
     </View>
   );

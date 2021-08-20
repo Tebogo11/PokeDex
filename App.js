@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { Provider } from "react-redux";
@@ -12,7 +12,13 @@ import Header from "./components/Header";
 import Constants from "expo-constants";
 //Redux State
 import pokemonReducer from "./store/reducers/pokemon";
+
+import { NativeRouter, Route, Link, useHistory } from "react-router-native";
+
 export default function App() {
+  const [searchingFor, setSearchingFor] = useState("");
+  const [currentScreen, setCurrentScreen] = useState("home");
+
   const rootReducer = combineReducers({
     Pokemon: pokemonReducer,
   });
@@ -26,9 +32,18 @@ export default function App() {
           <StatusBar translucent barStyle="light-content" />
         </View>
         <SafeAreaView style={{ flex: 1 }}>
-          <Header />
-          <SearchResult />
-          {/* <SearchPage /> */}
+          <NativeRouter>
+            <Header screen={currentScreen} setScreen={setCurrentScreen} />
+            <Route exact path="/">
+              <SearchPage
+                searching={setSearchingFor}
+                setScreen={setCurrentScreen}
+              />
+            </Route>
+            <Route path="/result">
+              <SearchResult searchData={searchingFor} />
+            </Route>
+          </NativeRouter>
         </SafeAreaView>
       </View>
     </Provider>

@@ -1,3 +1,5 @@
+import { useHistory } from "react-router-native";
+
 /**
  *
  * @param {Array.<string>} types type of pokemon

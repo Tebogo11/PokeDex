@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPokemon } from "../store/actions/pokemon";
-import { FlatList } from "react-native";
+import { FlatList, ActivityIndicator } from "react-native";
 import PokemonCard from "../components/PokemonCard";
-
-const SearchResult = () => {
+//icons
+import { Icon } from "react-native-elements";
+const SearchResult = ({ searchData }) => {
   /**
    * contains useDispatch function
    * @type {function}
@@ -23,13 +23,22 @@ const SearchResult = () => {
    */
   const pokemon = useSelector((state) => state.Pokemon.pokemon);
 
+  /**
+   * This are all the pokemons filtered to the users specfication
+   * @type {Array.<object>} Pokemons
+   */
+  const pokemonFilter = pokemon.filter((pokemon) => {
+    const name = pokemon.name;
+    return name.includes(searchData.toLowerCase());
+  });
+
   //If pokemon array is not empty then display in flatlist
   if (pokemon[1]) {
     return (
       <FlatList
         numColumns={2}
         style={styles.screen}
-        data={pokemon}
+        data={pokemonFilter}
         renderItem={(itemData) => {
           return (
             <PokemonCard
@@ -45,8 +54,8 @@ const SearchResult = () => {
   //Else display loading symbol
   else {
     return (
-      <View>
-        <Text>Is loading</Text>
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="red" />
       </View>
     );
   }
@@ -57,5 +66,10 @@ export default SearchResult;
 const styles = StyleSheet.create({
   screen: {
     height: "100%",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
