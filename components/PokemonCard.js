@@ -1,19 +1,53 @@
 import React from "react";
+import { TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { cardBgPicker, capitalizer } from "./UsefulFunction.js";
-
+import { useHistory } from "react-router-native";
 //Card component for each pokemon on the SearchResult page
-const PokemonCard = ({ name, imageUrl, types }) => {
-
+const PokemonCard = ({
+  name,
+  imageUrl,
+  types,
+  setScreen,
+  id,
+  setViewingPokemonID,
+  setHeader,
+  containerStyle,
+}) => {
   /**
    * Holds a string, with the color that matchs
    * the type of pokemon
-   * @type {function} 
+   * @type {function}
    */
   const bgColor = cardBgPicker(types);
 
+  const history = useHistory();
+
+  /**
+   * This changes the current screen of the page
+   * @param {string} path the screen the user is trying to reach
+   * @return {void}
+   */
+  const routeChange = () => {
+    let path = `/info`;
+    history.push(path);
+    setScreen("info");
+    setHeader(capitalizer(name));
+    setViewingPokemonID(id);
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: bgColor }]}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor: bgColor,
+          width: containerStyle.width,
+          height: containerStyle.height,
+        },
+      ]}
+      onPress={routeChange}
+    >
       <Text style={styles.name}>{name.toUpperCase()}</Text>
       <Image
         style={styles.image}
@@ -28,7 +62,7 @@ const PokemonCard = ({ name, imageUrl, types }) => {
           <Text style={styles.type}>{capitalizer(types[1])} </Text>
         ) : null}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -66,7 +100,7 @@ const styles = StyleSheet.create({
   image: {
     marginTop: -8,
     height: "80%",
-    width: "110%",
+    width: "100%",
     alignSelf: "center",
     marginBottom: 0,
   },

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { Button } from "react-native-elements";
 
-import { Link, NativeRouter, useHistory } from "react-router-native";
+import { useHistory } from "react-router-native";
 //This is the first screen shown to the user
 //This is primarly meant for the user to type in the
 //details that my  result in finding their Pokemon
-const SearchPage = ({ searching, setScreen }) => {
-  const [searchValue, setSearchValue] = useState("");
+const SearchPage = ({ searching, setScreen, currentSearchValue }) => {
+  const [searchValue, setSearchValue] = useState(currentSearchValue);
 
   const history = useHistory();
 
@@ -26,13 +26,14 @@ const SearchPage = ({ searching, setScreen }) => {
     <View style={{ color: "red" }}>
       <Text style={styles.heading}>Find Your Pokémon</Text>
       <TextInput
+        value={searchValue}
         style={styles.searchBox}
         placeholder="Who are you looking for..."
         onChangeText={(value) => setSearchValue(value)}
       />
       <Text style={styles.description}>
-        Search the Pokédex for your favorite Pokémon/s by name, types, and
-        habitats.
+        Search the Pokédex for your favorite Pokémon from the first generation,
+        by name or types.
       </Text>
 
       <Button
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   //Search box description Style
   description: {
-    fontSize: 11,
+    fontSize: 12,
     marginHorizontal: 20,
   },
   button: {

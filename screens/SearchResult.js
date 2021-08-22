@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchPokemon } from "../store/actions/pokemon";
+import { useSelector } from "react-redux";
 import { FlatList, ActivityIndicator } from "react-native";
 import PokemonCard from "../components/PokemonCard";
 //icons
-import { Icon } from "react-native-elements";
-const SearchResult = ({ searchData }) => {
-  /**
-   * contains useDispatch function
-   * @type {function}
-   */
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchPokemon());
-  }, []);
-
+const SearchResult = ({
+  searchData,
+  setScreen,
+  setViewingPokemonID,
+  setHeader,
+}) => {
   /**
    * Contains all the pokemon information fetched from PokeApi
    * @type {Array.<object>}
@@ -29,11 +23,21 @@ const SearchResult = ({ searchData }) => {
    */
   const pokemonFilter = pokemon.filter((pokemon) => {
     const name = pokemon.name;
-    return name.includes(searchData.toLowerCase());
+    const type = pokemon.types;
+
+    //trim - incase user leaves space before or after last charactor
+    const value =
+      name.includes(searchData.toLowerCase().trim()) ||
+      type[0].includes(searchData.toLowerCase().trim()) ||
+      (type[1] !== undefined &&
+        type[1].includes(searchData.toLowerCase().trim()));
+
+    return value;
   });
 
-  //If pokemon array is not empty then display in flatlist
-  if (pokemon[1]) {
+  const containerStyle = { width: "43%", height: 150 };
+  //If filtered pokemon array is not empty then display in flatlist
+  if (pokemonFilter[0]) {
     return (
       <FlatList
         numColumns={2}
@@ -42,16 +46,32 @@ const SearchResult = ({ searchData }) => {
         renderItem={(itemData) => {
           return (
             <PokemonCard
+              containerStyle={containerStyle}
               name={itemData.item.name}
               imageUrl={itemData.item.image}
               types={itemData.item.types}
+              setScreen={setScreen}
+              id={itemData.item.id}
+              setViewingPokemonID={setViewingPokemonID}
+              setHeader={setHeader}
             />
           );
         }}
       />
     );
   }
+  //If filtered pokemon array is empty, check to see if pokemon have being retriece
+  //if yes, then search results were unable to match
+  else if (pokemon[0]) {
+    return (
+      <View style={styles.loading}>
+        <Text style={styles.warning}>Sorry no pokemon with those details</Text>
+        <Text style={styles.warning}>were found, Try again</Text>
+      </View>
+    );
+  }
   //Else display loading symbol
+  //This shows pokemon are still being fetched from PokeApi
   else {
     return (
       <View style={styles.loading}>
@@ -71,5 +91,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  warning: {
+    color: "red",
+    fontSize: 16,
   },
 });

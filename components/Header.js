@@ -8,7 +8,7 @@ import { Icon } from "react-native-elements";
 import { useHistory } from "react-router-native";
 //This component is the header for application, with navigation to travel
 //Back and fourth
-const Header = ({ setScreen, screen }) => {
+const Header = ({ setScreen, screen, setHeader, header }) => {
   const history = useHistory();
   /**
    * This changes the current screen of the page
@@ -16,13 +16,13 @@ const Header = ({ setScreen, screen }) => {
    * @return {void}
    */
   const routeChange = (newPath) => {
-    if (newPath) {
+    if (newPath === "home") {
       history.push("/");
       setScreen("home");
     } else {
-      let path = `/` + newpath;
+      let path = `/` + newPath;
       history.push(path);
-      setScreen(newpath);
+      setScreen(newPath);
     }
   };
   return (
@@ -41,7 +41,8 @@ const Header = ({ setScreen, screen }) => {
                     if (screen === "result") {
                       routeChange("home");
                     } else {
-                      routeChange("info");
+                      routeChange("result");
+                      setHeader("Pokédex");
                     }
                   }}
                 />
@@ -51,7 +52,7 @@ const Header = ({ setScreen, screen }) => {
         </View>
         <Image source={headerImage} style={styles.image} />
       </View>
-      <Text style={styles.title}>PokéDex</Text>
+      <Text style={styles.title}>{header}</Text>
     </View>
   );
 };
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: "flex-end",
-    marginRight: 50,
+    marginRight: 30,
     fontSize: 22,
     marginTop: -30,
     marginBottom: 10,
