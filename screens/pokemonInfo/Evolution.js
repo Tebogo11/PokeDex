@@ -13,10 +13,15 @@ const Evolution = ({ pokemon, setScreen, setViewingPokemonID, setHeader }) => {
   const [load, setload] = useState(false);
   /**
    * Contains all the pokemon information fetched from PokeApi
-   * @type {Array.<object>}
+   * @type {Array.<object>} pokemonArray
    */
   const pokemonArray = useSelector((state) => state.Pokemon.pokemon);
 
+  /**
+   * This function is used to find pokemon that a linked to the current selected pokemon,
+   * in the evolution chain
+   * @return {void}
+   */
   const pokemonData = () => {
     pokemonArray.forEach((pokemon) => {
       if (pokemon.name == startEvolve) {
@@ -29,6 +34,11 @@ const Evolution = ({ pokemon, setScreen, setViewingPokemonID, setHeader }) => {
     });
   };
 
+  /**
+   * This function works by first finding the evoulution chain in species endpoint
+   * Then it works through the evolution chain to find all related pokemon and save them in state
+   * @returns {void}
+   */
   const data = async () => {
     setload(false);
     await axios
@@ -40,7 +50,7 @@ const Evolution = ({ pokemon, setScreen, setViewingPokemonID, setHeader }) => {
       .then((evolveChain) => {
         axios.get(evolveChain.url).then((item) => {
           let firstEvolve = item.data.chain.species.name;
-          console.log(item.data.chain);
+
           setStartEvolve(firstEvolve);
           let secondStageEv = item.data.chain.evolves_to;
           if (secondStageEv[0]) {
@@ -64,6 +74,10 @@ const Evolution = ({ pokemon, setScreen, setViewingPokemonID, setHeader }) => {
     pokemonData();
   }, [load]);
 
+  /**
+   * This object holds styling properties for the size for the card thats displays the pokemon
+   * @type {object} containerStyle
+   */
   const containerStyle = { width: "80%", height: 250 };
 
   return (

@@ -11,9 +11,18 @@ export const SET_POKEMONS = "SET_POKEMONS";
 export const fetchPokemon = () => {
   return async (dispatch) => {
     try {
+      /**
+       * Fetch possible pokemon that might be stored in memory
+       * @type {string} pokemon array turned in t string
+       */
       const storedPokemon = await AsyncStorage.getItem("dataKey");
-
+      /**
+       * Turning string array back to normal array
+       * @type {Array.<object>}
+       */
       const restoredArray = JSON.parse(storedPokemon);
+
+      //if a array has being stored in memory then dont fetch it from the web
       if (!restoredArray) {
         //Fetch all pokemoyn and reference to the endpoint that contains further information on pokemon
         const allPokemonUrl = await axios
@@ -71,16 +80,20 @@ export const fetchPokemon = () => {
             .catch((err) => console.log(err));
         }
 
+        /**
+         * An array of 151 pokemon turn in to string to be stored in memory
+         * @type {string} array changed to string
+         */
         const stringifiedArray = JSON.stringify(loadedPokemon);
+
+        //Storing stringified array in to memory with AysncStorage
         await AsyncStorage.setItem("dataKey", stringifiedArray);
 
-        console.log("loadinf data");
         dispatch({
           type: SET_POKEMONS,
           pokemon: loadedPokemon,
         });
       } else {
-        console.log("saved Data");
         dispatch({
           type: SET_POKEMONS,
           pokemon: restoredArray,

@@ -5,6 +5,14 @@ import { capitalizer } from "../../components/UsefulFunction";
 
 const Abilities = ({ abilities }) => {
   const [abilitiesInfo, setabilitiesInfo] = useState([]);
+
+  /**
+   * This function is retrive informatio about abilites.
+   * It loops through the abilities array provide to it and fetchs information by
+   * tagging the name of the abilitie in the abilitiy endpoint then storing information
+   * in an object which is then push to an array
+   * @return {void}
+   */
   const data = () => {
     abilities.forEach((item) => {
       axios

@@ -14,11 +14,25 @@ import Description from "./Description";
 import Evolution from "./Evolution";
 import HeaderInfo from "./HeaderInfo";
 
+//This component contains further detail on a selected pokemon by a user
 const InfoPage = ({ pokemonID, setScreen, setViewingPokemonID, setHeader }) => {
+  /**
+   * Contains all the pokemon information fetched from PokeApi
+   * @type {Array.<object>}
+   */
   const pokemons = useSelector((state) => state.Pokemon.pokemon);
+
+  /**This array contains the value the user selected to view
+   * @type {Array.<object>}
+   */
   const pokemonInfo = pokemons.filter((item) => item.id === pokemonID);
+  /**
+   * The selected pokemon
+   * @type {<object>}
+   */
   const pokemon = pokemonInfo[0];
 
+  //if pokemon data has being fetched then all data should be avaible, so display
   if (pokemon) {
     return (
       <ScrollView style={styles.container}>
@@ -41,7 +55,9 @@ const InfoPage = ({ pokemonID, setScreen, setViewingPokemonID, setHeader }) => {
         />
       </ScrollView>
     );
-  } else {
+  }
+  //wait till data has being fetched from PokeApi
+  else {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color="red" />

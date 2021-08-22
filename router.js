@@ -18,6 +18,7 @@ const Router = () => {
   const [viewingPokemonID, setViewingPokemonID] = useState(0);
   const dispatch = useDispatch();
 
+  //Fetch all pokemon from PokeApi then store them in state
   useEffect(() => {
     dispatch(fetchPokemon());
   }, []);

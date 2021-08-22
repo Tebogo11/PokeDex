@@ -11,6 +11,10 @@ const Description = ({ pokemon }) => {
   const [isLegend, setIsLegend] = useState(false);
   const [isMythical, setIsMythical] = useState(false);
 
+  /**
+   * This function fetchs data from the pokemon species endpoint and stores it state to then be displayed
+   * @return {void}
+   */
   const data = async () => {
     await axios
       .get(pokemon.pokemonSpeciesUrl)
@@ -35,7 +39,7 @@ const Description = ({ pokemon }) => {
     return (
       <View>
         <Text>
-          <Text style={styles.subtitle}>Egg Group:</Text>{" "}
+          <Text style={styles.subtitle}>Egg Group: </Text>
           {capitalizer(eggGroup[0].name)},{" "}
           {eggGroup[1] ? capitalizer(eggGroup[1].name) : null}
         </Text>
@@ -45,9 +49,13 @@ const Description = ({ pokemon }) => {
         <Text>
           <Text style={styles.subtitle}>Color:</Text> {capitalizer(colors)}
         </Text>
-        {isBaby ? <Text>Is a baby pokemon</Text> : null}
-        {isLegend ? <Text>Is a legendary pokemon</Text> : null}
-        {isMythical ? <Text>Is a mythical pokemon </Text> : null}
+        {isBaby ? <Text style={styles.subtitle}>Is a baby pokemon</Text> : null}
+        {isLegend ? (
+          <Text style={styles.subtitle}>Is a legendary pokemon</Text>
+        ) : null}
+        {isMythical ? (
+          <Text style={styles.subtitle}>Is a mythical pokemon </Text>
+        ) : null}
       </View>
     );
   } else {
